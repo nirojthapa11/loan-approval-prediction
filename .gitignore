@@ -1,0 +1,28 @@
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Environment variables / secrets
+.env
+
+# Large / generated artifacts (keep repo lean — mention in README how to regenerate)
+models/*.pkl
+data/*.csv
+
+# Logs
+*.log
