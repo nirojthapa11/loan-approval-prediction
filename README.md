@@ -3,7 +3,7 @@
 A machine learning project that predicts whether a loan application will be
 approved or rejected, based on applicant financial and demographic details.
 
-> **Status:** 🚧 In development (Day 1 of 6) — project setup and initial data exploration.
+> **Status:** 🚧 In development (Day 2 of 6) — project setup and initial data exploration.
 
 ## Problem Statement
 
@@ -69,7 +69,7 @@ jupyter notebook
 ## Roadmap
 
 - [x] Day 1 — Project setup, dataset loading, initial exploration
-- [ ] Day 2 — Data cleaning & feature engineering
+- [x] Day 2 — Data cleaning & feature engineering
 - [ ] Day 3 — Exploratory data analysis & feature selection
 - [ ] Day 4 — Model training, comparison, tuning, evaluation
 - [ ] Day 5 — Streamlit application
