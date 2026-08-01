@@ -45,4 +45,24 @@ def evaluate_model(name: str, model, X_test, y_test) -> dict:
     return metrics
 
 
+def print_evaluation_report(name: str, y_test, y_pred) -> None:
+    """Print the sklearn classification report for a single model."""
+    print(f"\n--- {name} ---")
+    print(classification_report(y_test, y_pred, target_names=["Rejected", "Approved"]))
+    
 
+def plot_confusion_matrix(name: str, y_test, y_pred, ax=None):
+    """Plot a labeled confusion matrix heatmap for a single model."""
+    cm = confusion_matrix(y_test, y_pred)
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(5, 4))
+    sns.heatmap(
+        cm, annot=True, fmt="d", cmap="Blues",
+        xticklabels=["Rejected", "Approved"],
+        yticklabels=["Rejected", "Approved"],
+        ax=ax,
+    )
+    ax.set_title(f"Confusion Matrix — {name}")
+    ax.set_xlabel("Predicted")
+    ax.set_ylabel("Actual")
+    return ax     

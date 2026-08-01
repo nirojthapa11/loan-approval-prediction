@@ -1,3 +1,16 @@
+"""
+train.py
+
+Model training, cross-validation, and hyperparameter tuning for the
+Loan Approval Prediction project.
+
+Trains and tunes seven classifiers, compares them on cross-validated
+F1 score, and saves the best-performing model + fitted scaler to disk.
+
+Run directly: `python src/train.py` (from the project root, with the
+venv activated).
+"""
+
 import warnings
 warnings.filterwarnings("ignore")
 
