@@ -66,3 +66,27 @@ def plot_confusion_matrix(name: str, y_test, y_pred, ax=None):
     ax.set_xlabel("Predicted")
     ax.set_ylabel("Actual")
     return ax     
+
+
+def plot_roc_curves(results: list, y_test, ax=None):
+    """
+    Plot ROC curves for multiple models on one shared chart.
+
+    Parameters
+    ----------
+    results : list of dict
+        Each dict must have 'name' and 'y_proba' keys (from evaluate_model).
+    y_test : test labels
+    """
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(7, 6))
+    for r in results:
+        if r["y_proba"] is not None:
+            fpr, tpr, _ = roc_curve(y_test, r["y_proba"])
+            ax.plot(fpr, tpr, label=f"{r['name']} (AUC = {r['roc_auc']:.3f})")
+    ax.plot([0, 1], [0, 1], linestyle="--", color="gray", label="Random baseline")
+    ax.set_xlabel("False Positive Rate")
+    ax.set_ylabel("True Positive Rate")
+    ax.set_title("ROC Curves — All Models")
+    ax.legend(loc="lower right", fontsize=8)
+    return ax
