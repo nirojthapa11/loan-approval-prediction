@@ -19,9 +19,12 @@ Thumbs.db
 
 # Environment variables / secrets
 .env
-
-# Large / generated artifacts (keep repo lean — mention in README how to regenerate)
-models/*.pkl
+# Large / generated artifacts
+# Raw and intermediate datasets are excluded (regenerate via notebooks 01-03,
+# or download the raw CSV per README). Trained model artifacts in models/
+# ARE committed intentionally -- they're small (a few KB) and required for
+# app.py / the Flask API to run immediately after a clone, without forcing
+# every user to first run src/train.py.
 data/*.csv
 
 # Logs

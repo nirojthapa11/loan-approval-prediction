@@ -71,7 +71,7 @@ jupyter notebook
 - [x] Day 1 — Project setup, dataset loading, initial exploration
 - [x] Day 2 — Data cleaning & feature engineering
 - [x] Day 3 — Exploratory data analysis & feature selection
-- [ ] Day 4 — Model training, comparison, tuning, evaluation
+- [x] Day 4 — Model training, comparison, tuning, evaluation
 - [ ] Day 5 — Streamlit application
 - [ ] Day 6 — Documentation, Docker, final polish
 
