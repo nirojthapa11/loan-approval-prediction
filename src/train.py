@@ -76,3 +76,25 @@ MODEL_GRID = {
     },
 }
 
+
+def load_and_split(data_path: str = DATA_PATH, test_size: float = 0.2):
+    """
+    Load the feature-selected dataset and perform a stratified
+    train/test split.
+
+    Stratification matters here because loan_status is imbalanced
+    (62% Approved / 38% Rejected, per Day 1/3 findings) — an unstratified
+    split risks a test set with a meaningfully different class balance.
+
+    Returns
+    -------
+    X_train, X_test, y_train, y_test : pd.DataFrame / pd.Series
+    """
+    df = pd.read_csv(data_path)
+    X = df.drop(columns=[TARGET])
+    y = df[TARGET]
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=test_size, random_state=RANDOM_STATE, stratify=y
+    )
+    return X_train, X_test, y_train, y_test
