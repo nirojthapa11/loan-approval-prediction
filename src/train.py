@@ -176,6 +176,7 @@ def select_best_model(results: list) -> dict:
     """Return the result dict with the highest cross-validated F1 score."""
     return max(results, key=lambda r: r["best_cv_f1"])
 
+
 if __name__ == "__main__":
     print_section("Loading data and splitting (stratified, 80/20)")
     X_train, X_test, y_train, y_test = load_and_split()
@@ -194,4 +195,6 @@ if __name__ == "__main__":
     save_artifact(best["best_estimator"], "models/trained_model.pkl")
     save_artifact(scaler, "models/scaler.pkl")
     save_artifact(list(X_train.columns), "models/feature_columns.pkl")
+
+    print("\nDone. See notebooks/04_model_training_evaluation.ipynb and MODEL_COMPARISON.md for full results.")
 
