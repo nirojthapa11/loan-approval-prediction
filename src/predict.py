@@ -134,7 +134,7 @@ def predict_loan_status(raw_input: dict, model=None, scaler=None, feature_column
     prediction = model.predict(processed_input)[0]
     
     # Predict probabilities
-    probabilities = model.predict_probabilities(processed_input)[0]
+    probabilities = model.predict_proba(processed_input)[0]
 
     # Convert numeric prediction to readable label
     label = "Approved" if prediction == 1 else "Rejected"
