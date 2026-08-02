@@ -3,7 +3,7 @@
 A machine learning project that predicts whether a loan application will be
 approved or rejected, based on applicant financial and demographic details.
 
-> **Status:** 🚧 In development (Day 2 of 6) — project setup and initial data exploration.
+> **Status:** 🚧 In development 
 
 ## Problem Statement
 
@@ -30,7 +30,7 @@ Place the downloaded CSV in `data/loan_approval_dataset.csv`.
 
 ```
 loan-approval-prediction/
-├── app.py                  # Streamlit application (Day 5)
+├── app.py                  # Streamlit application 
 ├── requirements.txt        # Python dependencies
 ├── .gitignore
 ├── README.md
@@ -52,7 +52,7 @@ loan-approval-prediction/
 
 ```cmd
 :: 1. Clone the repository
-git clone https://github.com/<your-username>/loan-approval-prediction.git
+git clone https://github.com/nirojthapa11/loan-approval-prediction.git
 cd loan-approval-prediction
 
 :: 2. Create and activate a virtual environment
@@ -72,7 +72,7 @@ jupyter notebook
 - [x] Day 2 — Data cleaning & feature engineering
 - [x] Day 3 — Exploratory data analysis & feature selection
 - [x] Day 4 — Model training, comparison, tuning, evaluation
-- [ ] Day 5 — Streamlit application
+- [x] Day 5 — Streamlit application
 - [ ] Day 6 — Documentation, Docker, final polish
 
 ## License
