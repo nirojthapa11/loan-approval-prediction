@@ -1,3 +1,14 @@
+"""
+app.py
+
+Streamlit application for the Loan Approval Prediction project.
+Collects raw applicant details, runs them through the same pipeline
+used in training (src/predict.py), and displays the prediction with
+confidence and a brief explanation of the key drivers.
+
+Run with: streamlit run app.py
+"""
+
 import sys
 import os
 
@@ -6,7 +17,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 import streamlit as st
 import pandas as pd
 
-from predict import load_inference_artifacts, predict_loan_status
+from predict import load_inference_artifacts, predict_loan_status, build_feature_row
 
 st.set_page_config(
     page_title="Loan Approval Predictor",
@@ -28,7 +39,7 @@ def main():
         "whether this application would be approved, based on a model trained "
         "on historical loan approval data."
     )
-    
+
     # --- Load artifacts, with a clear error if training hasn't been run ---
     try:
         model, scaler, feature_columns = get_artifacts()
@@ -84,71 +95,60 @@ def main():
         "bank_asset_value": bank_asset_value,
     }
 
-    st.subheader("Prediction")
+    # --- Prediction ---
+    if st.sidebar.button("Predict", type="primary"):
+        try:
+            result = predict_loan_status(raw_input, model, scaler, feature_columns)
+        except Exception as e:
+            st.error(f"Something went wrong while predicting: {e}")
+            st.stop()
 
-    if st.button("🔍 Predict Loan Status"):
-
-        with st.spinner("Analyzing loan application..."):
-
-            result = predict_loan_status(
-                raw_input,
-                model,
-                scaler,
-                feature_columns,
-            )
-
-        st.subheader("Prediction Result")
+        st.header("Result")
 
         if result["prediction"] == "Approved":
-            st.success("✅ Loan Approved")
+            st.success(f"✅ **Loan Approved**")
         else:
-            st.error("❌ Loan Rejected")
+            st.error(f"❌ **Loan Rejected**")
 
         col1, col2 = st.columns(2)
+        col1.metric("Approval Probability", f"{result['approved_probability']*100:.1f}%")
+        col2.metric("Rejection Probability", f"{result['rejected_probability']*100:.1f}%")
 
-        with col1:
-            st.metric(
-                "Approval Probability",
-                f"{result['approved_probability'] * 100:.2f}%"
-            )
+        st.progress(result["approved_probability"])
 
-        with col2:
-            st.metric(
-                "Rejection Probability",
-                f"{result['rejected_probability'] * 100:.2f}%"
-            )   
-            
-        st.write("### Prediction Confidence")
+        # --- Explanation, grounded in the actual model's learned feature importances ---
+        st.subheader("Why this result?")
 
-        st.write("Approval Probability")
+        engineered = build_feature_row(raw_input)
+        asset_to_loan_ratio = float(engineered["asset_to_loan_ratio"].iloc[0])
+        total_assets_value = float(engineered["total_assets_value"].iloc[0])
 
-        st.progress(float(result["approved_probability"]))
+        st.write(
+            f"""
+This model was trained on historical data where **CIBIL score is by far the
+strongest predictor** of approval (roughly 81% of the model's decision
+weight), followed by the loan-to-income ratio, loan term, and how well an
+applicant's total assets cover the requested loan amount.
 
-        st.write("Rejection Probability")
-
-        st.progress(float(result["rejected_probability"]))
-
-        confidence = max(
-            result["approved_probability"],
-            result["rejected_probability"],
+**This application's key numbers:**
+- CIBIL Score: **{cibil_score}** {"(above the dataset's approved-applicant average of ~703)" if cibil_score >= 703 else "(below the dataset's approved-applicant average of ~703)"}
+- Total Assets: ₹{total_assets_value:,.0f}
+- Asset-to-Loan Ratio: **{asset_to_loan_ratio:.2f}** (dataset average ≈ 2.23 — a higher ratio means assets more comfortably cover the requested loan)
+            """
         )
 
-        st.info(
-            f"Model Confidence: {confidence * 100:.2f}%"
-        )
-   
-    st.subheader("Current Input Values")
+        with st.expander("See exact values sent to the model"):
+            st.dataframe(engineered.T.rename(columns={0: "Value"}))
 
-    st.dataframe(
-        pd.DataFrame([raw_input])
-        )
-    
+    else:
+        st.info("Fill in the applicant details on the left, then click **Predict**.")
+
     st.markdown("---")
+
     st.caption(
-        "Loan Approval Prediction System | Streamlit Prototype"
+        "Developed by Niroj Thapa | "
+        "Loan Approval Prediction Project"
     )
 
-    
-    
 if __name__ == "__main__":
     main()
