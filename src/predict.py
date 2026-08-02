@@ -70,10 +70,22 @@ def predict_loan_status(raw_input, model, scaler, feature_columns):
     # Convert numeric prediction to readable label
     label = "Approved" if prediction == 1 else "Rejected"
 
-    return {
-        "prediction": label
-    }
+   # Predict class
+    prediction = model.predict(processed_input)[0]
 
+    # Predict probabilities
+    probabilities = model.predict_proba(processed_input)[0]
+
+    approved_probability = probabilities[1]
+    rejected_probability = probabilities[0]
+
+    label = "Approved" if prediction == 1 else "Rejected"
+
+    return {
+        "prediction": label,
+        "approved_probability": approved_probability,
+        "rejected_probability": rejected_probability,
+    }
 
 if __name__ == "__main__":
     # Quick manual smoke test

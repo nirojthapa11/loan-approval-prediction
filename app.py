@@ -88,7 +88,7 @@ def main():
 
     if st.button("🔍 Predict Loan Status"):
 
-        with st.spinner("Analyzing application..."):
+        with st.spinner("Analyzing loan application..."):
 
             result = predict_loan_status(
                 raw_input,
@@ -97,12 +97,45 @@ def main():
                 feature_columns,
             )
 
+        st.subheader("Prediction Result")
+
         if result["prediction"] == "Approved":
             st.success("✅ Loan Approved")
-
         else:
             st.error("❌ Loan Rejected")
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.metric(
+                "Approval Probability",
+                f"{result['approved_probability'] * 100:.2f}%"
+            )
+
+        with col2:
+            st.metric(
+                "Rejection Probability",
+                f"{result['rejected_probability'] * 100:.2f}%"
+            )   
             
+        st.write("### Prediction Confidence")
+
+        st.write("Approval Probability")
+
+        st.progress(float(result["approved_probability"]))
+
+        st.write("Rejection Probability")
+
+        st.progress(float(result["rejected_probability"]))
+
+        confidence = max(
+            result["approved_probability"],
+            result["rejected_probability"],
+        )
+
+        st.info(
+            f"Model Confidence: {confidence * 100:.2f}%"
+        )
    
     st.subheader("Current Input Values")
 
@@ -114,6 +147,7 @@ def main():
     st.caption(
         "Loan Approval Prediction System | Streamlit Prototype"
     )
+
     
     
 if __name__ == "__main__":
