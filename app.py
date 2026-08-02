@@ -14,7 +14,6 @@ st.set_page_config(
 )
 
 
-
 def main():
     st.title("🏦 Loan Approval Predictor")
     st.write(
