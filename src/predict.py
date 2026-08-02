@@ -46,12 +46,33 @@ def build_feature_row(raw_input: dict) -> pd.DataFrame:
     return df
 
 
-def preprocess_input(raw_input: dict, scaler, feature_columns: list) -> pd.DataFrame:
-    df = build_feature_row(raw_input)
+def preprocess_input(df, scaler, feature_columns):
+
     df = df[feature_columns]  # enforce exact column set + order used in training
     scaled = scaler.transform(df)
     return pd.DataFrame(scaled, columns=feature_columns)
 
+
+def predict_loan_status(raw_input, model, scaler, feature_columns):
+    # Convert raw user input into a dataframe
+    input_df = build_feature_row(raw_input)
+
+    # Apply preprocessing
+    processed_input = preprocess_input(
+        input_df,
+        scaler,
+        feature_columns,
+    )
+
+    # Generate prediction
+    prediction = model.predict(processed_input)[0]
+
+    # Convert numeric prediction to readable label
+    label = "Approved" if prediction == 1 else "Rejected"
+
+    return {
+        "prediction": label
+    }
 
 
 if __name__ == "__main__":

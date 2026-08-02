@@ -6,12 +6,19 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 import streamlit as st
 import pandas as pd
 
+from predict import load_inference_artifacts, predict_loan_status
 
 st.set_page_config(
     page_title="Loan Approval Predictor",
     page_icon="🏦",
     layout="centered",
 )
+
+
+@st.cache_resource
+def get_artifacts():
+    """Load model/scaler/feature_columns once and cache across reruns."""
+    return load_inference_artifacts()
 
 
 def main():
@@ -21,6 +28,16 @@ def main():
         "whether this application would be approved, based on a model trained "
         "on historical loan approval data."
     )
+    
+    # --- Load artifacts, with a clear error if training hasn't been run ---
+    try:
+        model, scaler, feature_columns = get_artifacts()
+    except FileNotFoundError as e:
+        st.error(
+            f"Model artifacts not found. {e}\n\n"
+            "Run `python src/train.py` from the project root first, then restart this app."
+        )
+        st.stop()
 
     # --- Sidebar inputs ---
     st.sidebar.header("Applicant Details")
@@ -70,8 +87,22 @@ def main():
     st.subheader("Prediction")
 
     if st.button("🔍 Predict Loan Status"):
-        st.info("Prediction functionality will be implemented later")
-   
+
+        with st.spinner("Analyzing application..."):
+
+            result = predict_loan_status(
+                raw_input,
+                model,
+                scaler,
+                feature_columns,
+            )
+
+        if result["prediction"] == "Approved":
+            st.success("✅ Loan Approved")
+
+        else:
+            st.error("❌ Loan Rejected")
+            
    
     st.subheader("Current Input Values")
 
