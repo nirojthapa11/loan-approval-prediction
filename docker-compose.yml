@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  streamlit-app:
+    build: .
+    container_name: loan-approval-streamlit
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./models:/app/models   # so a retrained model on the host is picked up without rebuilding the image
+      - ./reports:/app/reports
+    command: streamlit run app.py --server.address=0.0.0.0 --server.port=8501
+    restart: unless-stopped
+
+  flask-api:
+    build: .
+    container_name: loan-approval-api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./models:/app/models
+    command: python api/app.py
+    restart: unless-stopped

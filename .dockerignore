@@ -1,0 +1,31 @@
+# Virtual environment (dependencies installed fresh inside the image)
+venv/
+env/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# Git
+.git/
+.gitignore
+
+# Raw data (large, and typically not needed inside the image --
+# training happens outside Docker via src/train.py, then models/*.pkl
+# are copied in)
+data/*.csv
+
+# Generated reports (runtime output, not source)
+reports/*.csv
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Docs not needed at runtime
+*.md
+images/
