@@ -1,0 +1,111 @@
+{
+  "info": {
+    "name": "Loan Approval Prediction API",
+    "description": "Endpoints for the Loan Approval Prediction Flask API. Import this file directly into Postman (File > Import).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000"
+    }
+  ],
+  "item": [
+    {
+      "name": "GET / (Status)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/",
+          "host": ["{{base_url}}"],
+          "path": [""]
+        }
+      }
+    },
+    {
+      "name": "GET /health (Health Check)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "POST /predict (Valid Request - Likely Approved)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"no_of_dependents\": 2,\n  \"education\": \"Graduate\",\n  \"self_employed\": \"No\",\n  \"income_annum\": 8000000,\n  \"loan_amount\": 12000000,\n  \"loan_term\": 10,\n  \"cibil_score\": 780,\n  \"residential_assets_value\": 5000000,\n  \"commercial_assets_value\": 4000000,\n  \"luxury_assets_value\": 6000000,\n  \"bank_asset_value\": 3000000\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/predict",
+          "host": ["{{base_url}}"],
+          "path": ["predict"]
+        }
+      }
+    },
+    {
+      "name": "POST /predict (Valid Request - Likely Rejected)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"no_of_dependents\": 3,\n  \"education\": \"Not Graduate\",\n  \"self_employed\": \"Yes\",\n  \"income_annum\": 2000000,\n  \"loan_amount\": 15000000,\n  \"loan_term\": 5,\n  \"cibil_score\": 420,\n  \"residential_assets_value\": 500000,\n  \"commercial_assets_value\": 0,\n  \"luxury_assets_value\": 500000,\n  \"bank_asset_value\": 200000\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/predict",
+          "host": ["{{base_url}}"],
+          "path": ["predict"]
+        }
+      }
+    },
+    {
+      "name": "POST /predict (Invalid - Missing Fields)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cibil_score\": 780\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/predict",
+          "host": ["{{base_url}}"],
+          "path": ["predict"]
+        }
+      }
+    },
+    {
+      "name": "POST /predict (Invalid - Out of Range CIBIL Score)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"no_of_dependents\": 2,\n  \"education\": \"Graduate\",\n  \"self_employed\": \"No\",\n  \"income_annum\": 8000000,\n  \"loan_amount\": 12000000,\n  \"loan_term\": 10,\n  \"cibil_score\": 9999,\n  \"residential_assets_value\": 5000000,\n  \"commercial_assets_value\": 4000000,\n  \"luxury_assets_value\": 6000000,\n  \"bank_asset_value\": 3000000\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/predict",
+          "host": ["{{base_url}}"],
+          "path": ["predict"]
+        }
+      }
+    }
+  ]
+}
