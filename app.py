@@ -28,7 +28,7 @@ st.set_page_config(
     layout="centered",
 )
 
-# Real metrics from Day 4 (see MODEL_COMPARISON.md) -- kept as constants
+# Real metrics (see MODEL_COMPARISON.md) -- kept as constants
 # here rather than recomputed, since retraining is a deliberate, separate
 # step (python src/train.py), not something a page load should trigger.
 MODEL_NAME = "Decision Tree Classifier"
